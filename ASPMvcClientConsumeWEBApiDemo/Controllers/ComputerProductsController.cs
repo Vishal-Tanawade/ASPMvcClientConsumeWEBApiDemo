@@ -31,10 +31,28 @@ namespace ASPMvcClientConsumeWEBApiDemo.Controllers
         }
 
         // GET: ComputerProductsController/Details/5
-        public ActionResult Details(int id)
+        //public ActionResult Details(int id)
+        //{
+
+
+        //    return View();
+        //}
+
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            Product product = new Product();
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:7652/");
+            HttpResponseMessage response = await client.GetAsync($"api/Products/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                product = JsonConvert.DeserializeObject<Product>(result);
+            }
+            return View(product);
+
         }
+
 
         // GET: ComputerProductsController/Create
         public ActionResult Create()
