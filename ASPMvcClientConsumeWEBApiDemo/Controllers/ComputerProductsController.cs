@@ -138,24 +138,51 @@ namespace ASPMvcClientConsumeWEBApiDemo.Controllers
         }
 
         // GET: ComputerProductsController/Delete/5
-        public ActionResult Delete(int id)
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            Product product = new Product();
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:7652/");
+            HttpResponseMessage response = await client.GetAsync($"api/Products/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                product = JsonConvert.DeserializeObject<Product>(result);
+            }
+            return View(product);
         }
+      
 
         // POST: ComputerProductsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+        public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
-            try
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:7652/");
+            HttpResponseMessage response = await client.DeleteAsync($"api/Products/{id}");
+            if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View();
         }
+
+        
     }
 }
