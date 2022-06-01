@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace ASPMvcClientConsumeWEBApiDemo.Controllers
@@ -61,19 +62,35 @@ namespace ASPMvcClientConsumeWEBApiDemo.Controllers
         }
 
         // POST: ComputerProductsController/Create
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Product product)
         {
-            try
-            {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:7652/");
+            var response = await client.PostAsJsonAsync("api/Products", product);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View();
+
+
         }
+
+
+
 
         // GET: ComputerProductsController/Edit/5
         public ActionResult Edit(int id)
