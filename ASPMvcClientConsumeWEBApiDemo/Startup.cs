@@ -46,7 +46,7 @@ namespace ASPMvcClientConsumeWEBApiDemo
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=ComputerProducts}/{action=Index}/{id?}");
             });
         }
     }
