@@ -18,7 +18,7 @@ namespace ASPMvcClientConsumeWEBApiDemo.Controllers
         {
             List<Product> products = new List<Product>();
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:7652/");
+            client.BaseAddress = new Uri("http://localhost:7652/"); //copy this url from swagger get method (web api project)
             HttpResponseMessage response = await client.GetAsync("api/Products");
             if (response.IsSuccessStatusCode)
             {
