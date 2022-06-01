@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ASPMvcClientConsumeWEBApiDemo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ASPMvcClientConsumeWEBApiDemo.Controllers
@@ -10,9 +13,21 @@ namespace ASPMvcClientConsumeWEBApiDemo.Controllers
     public class ComputerProductsController : Controller
     {
         // GET: ComputerProductsController
-        public ActionResult Index()
+        //http://localhost:7652/api/Products
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Product> products = new List<Product>();
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:7652/");
+            HttpResponseMessage response = await client.GetAsync("api/Products");
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                products = JsonConvert.DeserializeObject<List<Product>>(result); // for JSONConvert install newtonsoft nuget package
+
+            }
+
+            return View(products);
         }
 
         // GET: ComputerProductsController/Details/5
